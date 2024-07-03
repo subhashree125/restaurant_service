@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Restaurant Service</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playwrite+MX:wght@100..400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playwrite+IT+Moderna:wght@100..400&display=swap');
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 1em;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 1em;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .playwrite-mx-h1 {
+            font-family: "Playwrite MX", cursive;
+            font-optical-sizing: auto;
+            font-weight: 400;
+            font-style: normal;
+            color:rgb(255, 255, 255);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 1.0);
+        }
+        .playwrite-it-moderna-h2 {
+             font-family: "Playwrite IT Moderna", cursive;
+             font-optical-sizing: auto;
+             font-weight: 400;
+             font-style: normal;
+             color:rgb(82, 228, 218);
+             font-size: medium;
+        }
+
+
+        .hero-section {
+            background: url('https://i.pinimg.com/originals/4a/69/94/4a699401d54f9c4332b50d3bd02e07e6.jpg') no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-section h1 {
+            font-size: 3em;
+            margin: 0;
+        }
+
+        .hero-section p {
+            font-size: 1.5em;
+        }
+        .statement {
+            text-align: center;
+            background-color: #f8f8f8;
+            padding: 20px;
+            margin: 0;
+        }
+       
+        .section {
+            padding: 50px 20px;
+            display: flex; 
+            align-items: center; 
+        }
+
+        #about .text-content {
+            flex: 1; 
+            text-align: left; 
+            padding-right: 20px; 
+        }
+        #about .image-content {
+            flex: 1; 
+        }
+        #about img {
+            max-width: 100%; 
+            height: auto; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+            border-radius: 10px; 
+        }
+        #about h2 {
+            font-family: 'Playwrite IT Moderna', cursive;
+            font-size: 2em;
+            color: rgb(23, 5, 37);
+            margin-bottom: 10px;
+            border-bottom: 2px solid rgb(23, 5, 37);
+            padding-bottom: 5px;
+            padding-left: 5px;
+        }
+
+        #about p {
+            font-size: 1.2em;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+        #about p:first-letter {
+            font-size: 1.5em;
+            font-weight:600;
+            color: rgb(23, 5, 37);
+        }
+
+        #about .text-content::before {
+            content: "";
+            display: block;
+            width: 50px;
+            height: 5px;
+            background-color: rgb(23, 5, 37);
+            margin-bottom: 20px;
+        }
+        .section#featured-dishes {
+            text-align: center;
+            background-color: #fff;
+            padding: 50px 20px;
+        }
+
+        .section#featured-dishes h2 {
+            font-family: 'Playwrite IT Moderna', cursive;
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .featured-dishes {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .dish {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            padding: 20px;
+            width: calc(33% - 40px);
+            box-sizing: border-box;
+            border-radius: 10px;
+            position: relative;
+            text-align: left;
+        }
+        .testimonials {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: white;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.947);
+            margin: 10px;
+            padding: 20px;
+            width: 300px;
+            height: 300px;  
+            box-sizing: border-box;
+            border-radius: 10px;
+            position: relative;
+            text-align: center;  
+            display: flex;
+            align-items: center;  
+            justify-content: center;  
+        }
+        .testimonials p {
+            font-size: 1em;
+            line-height: 1.5;
+            margin: 0;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 1);
+        }
+
+        .dish h3 {
+            font-family: 'Playwrite MX', cursive;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 1);
+        }
+
+        .dish p {
+            font-size: 1em;
+            line-height: 1.5;
+            margin: 0;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.981);
+        }
+        #contact {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        #contact .contact-info {
+            flex: 1;
+            text-align: left;
+            padding-right: 20px;
+        }
+
+        #contact .contact-info h2 {
+            font-family: 'Playwrite IT Moderna', cursive;
+            font-size: 2em;
+            color: rgb(23, 5, 37);
+            margin-bottom: 10px;
+            border-bottom: 2px solid rgb(23, 5, 37);
+            padding-bottom: 5px;
+            padding-left: 5px;
+        }
+
+        #contact .contact-info p {
+            font-size: 1.2em;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        
+
+        #contact .reservation-form {
+            flex: 1;
+            max-width: 600px;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        
+        .reservation-form{
+            flex:1;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.966);
+        }
+
+        .reservation-form form{
+            display: flex;
+            flex-direction: column;
+        }
+
+        .reservation-form form input, .reservation-form form button{
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+            padding-left: 2.5px;
+            font-size: 1.1em;
+            width:100%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.966);
+            box-sizing: border-box;
+        }
+        .reservation-form form button {
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .reservation-form form button:hover {
+            background-color: #555;
+        }
+        #reservation h2 {
+            font-family: 'Playwrite IT Moderna', cursive;
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        #events .text-content {
+            flex: 1;
+            text-align: right;
+            padding-left: 20px;
+        }
+
+        #events .image-content {
+            flex: 1;
+        }
+
+        #events img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        #events h2 {
+            font-family: 'Playwrite IT Moderna', cursive;
+            font-size: 2em;
+            color: rgb(23, 5, 37);
+            margin-bottom: 10px;
+            border-bottom: 2px solid rgb(23, 5, 37);
+            padding-bottom: 5px;
+            padding-right: 5px;
+        }
+
+        #events p {
+            font-size: 1.2em;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        #events p:first-letter {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: rgb(23, 5, 37);
+        }
+
+        #events .text-content::before {
+            content: "";
+            display: block;
+            width: 50px;
+            height: 5px;
+            background-color: rgb(23, 5, 37);
+            margin-bottom: 20px;
+        }
+        .alert {
+        padding: 20px;
+        background-color: #4CAF50; 
+        color: white;
+        margin-bottom: 15px;
+    }
+
+    .alert.success {
+        background-color: #4CAF50;
+    }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="{% url 'home' %}">Home</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}">Logout</a>
+            <a href="{% url 'menu' %}">Menu</a>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'signup' %}">Signup</a>
+        {% endif %}
+    </nav>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="hero-section">
+        <h1 class="playwrite-mx-h1">Welcome to Our Paradise</h1>
+    </div>
+    <div class="statement playwrite-it-moderna-h2">
+        <h2 style="color: rgb(23, 5, 37);">Savor the Pinnacle of Culinary Craftsmanship</h2>
+    </div>
+
+    <div class="section" id="about">
+        <div class="text-content">
+            <h2>About Us</h2>
+            <p>Paradise is an exotic 5-star restaurant offering an unparalleled dining experience. Nestled in the heart of Food City, our restaurant combines exquisite cuisine with an elegant ambiance, providing a perfect setting for any occasion. Our chefs use the freshest ingredients to create culinary masterpieces that delight the senses.</p>
+            <p>We take pride in our exceptional service, ensuring every guest feels valued and pampered. Whether you're celebrating a special event or simply enjoying a night out, Paradise promises an unforgettable experience. Join us to savor the pinnacle of culinary craftsmanship in a truly paradisiacal setting.</p>
+        </div>
+        <div class="image-content">
+            <img src="https://i.pinimg.com/originals/6e/fd/a6/6efda657dd35b6e0f9318fa947be6b58.jpg" alt="Restaurant Image">
+        </div>
+    </div>
+
+    <div class="section" id="featured-dishes">
+        <h2>Featured Dishes</h2>
+        <div class="featured-dishes">
+            <div class="dish" style="background-image: url('https://profoodrecipes.com/wp-content/uploads/2024/02/Rogan-Josh.jpg'); box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);">
+                <h3>Rogan Josh</h3>
+                <p>Rogan Josh is a fragrant and flavorful dish, featuring tender lamb pieces slow-cooked in a rich, aromatic blend of yogurt, browned onions, and spices like cardamom, cloves, and cinnamon. This Kashmiri classic is known for its deep red color derived from mild Kashmiri chili and its sumptuous, velvety texture.</p>
+            </div>
+            <div class="dish" style="background-image: url('https://www.carveyourcraving.com/wp-content/uploads/2021/09/Best-Malai-Kofta-recipe.jpg'); box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);">
+                <h3>Malai Kofta</h3>
+                <p>Malai Kofta is a rich and creamy North Indian delicacy, featuring soft, melt-in-your-mouth paneer and vegetable dumplings in a luscious tomato and cashew nut gravy. It's a perfect blend of spices and creaminess, offering a luxurious vegetarian experience.</p>
+            </div>
+            <div class="dish" style="background-image: url('https://profoodrecipes.com/wp-content/uploads/2024/02/Dahi-Bhalla.jpg'); box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);">
+                <h3>Dahi Bhalla</h3>
+                <p>Dahi Bhalla, a popular North Indian delicacy, features soft lentil fritters soaked in creamy yogurt, garnished with tangy tamarind chutney and aromatic spices. This refreshing and flavorful dish offers a perfect blend of sweet, sour, and savory tastes, making it an irresistible treat.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section" id="featured-dishes">
+        <h2>Customer Testimonials</h2>
+        <div class="featured-dishes">
+            <div class="testimonials" style="background-image: url('https://i.pinimg.com/originals/3b/e1/28/3be128d2502bbfb30de8bd6d9dceb2ad.jpg'); box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);">
+                <p>"I loved the variety of dishes on the menu, each one unique and flavorful."</p>
+            </div>
+            <div class="testimonials" style="background-image: url('https://img.rasset.ie/001c199b-614.jpg?ratio=1.78'); box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);">
+                <p>"A truly memorable dining experience."</p>
+            </div>
+            <div class="testimonials" style="background-image: url('https://i.pinimg.com/originals/ae/fe/1c/aefe1c5e099d0d7eaf93ea41714fe42b.jpg'); box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);">
+                <p>"Exceptional service! The staff was attentive and friendly."</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section" id="reservation">
+        <h2>Online Reservation</h2>
+        <div class="reservation-form">
+            <form>
+                <input type="text" placeholder="Name" required>
+                <input type="email" placeholder="Email" required>
+                <input type="tel" placeholder="Phone" required>
+                <input type="datetime-local" required>
+                <button type="submit">Reserve Now</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="section" id="events">
+        <div class="image-content">
+            <img src="https://www.restaurant-ambrosia.com/wp-content/uploads/2018/04/TES_9591-3.jpg" alt="Events Image">
+        </div>
+        <div class="text-content">
+            <h2>Upcoming Events</h2>
+            <p>Stay tuned for our upcoming events and special promotions. Join us for exclusive dining experiences, themed nights, and more.</p>
+            <p>Our events are designed to bring you the best of culinary artistry and entertainment, creating unforgettable memories. Check back often for updates!</p>
+        </div>
+    </div>
+    
+
+    
+
+    <div class="section" id="contact">
+        <div class="contact-info">
+            <h2>Location & Contact</h2>
+            <p>Address: 123 Restaurant St, Food City</p>
+            <p>Phone: (+91) 7003572195</p>
+            <p>Email: nilachakra2011@gmail.com</p>
+        </div>
+        <div class="reservation-form">
+            <form method=""post action="{% url 'contact' %}">
+                {% csrf_token %}
+                <input type="text" placeholder="Name" required>
+                <input type="email" placeholder="Email" required>
+                <input type="text" placeholder="Message" required>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playwrite+IT+Moderna:wght@100..400&display=swap');
+    body {
+        margin: 0;
+        font-family:"Playwrite IT Moderna", cursive;
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .logout-container {
+        background-color: #fff;
+        padding: 20px 40px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .logout-content h1 {
+        margin-bottom: 10px;
+        font-size: 24px;
+        color: #333;
+    }
+
+    .logout-content p {
+        margin-bottom: 20px;
+        color: #666;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #007bff;
+        border-radius: 4px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+    </style>
+</head>
+<body>
+    <div class="logout-container">
+        <div class="logout-content">
+            <h1>You have been logged out</h1>
+            <p>Thank you for visiting our site. We hope to see you again soon.</p>
+            <a href="/login" class="btn">Login Again</a>
+        </div>
+    </div>
+</body>
+</html>

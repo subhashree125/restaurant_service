@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Menu</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playwrite+IT+Moderna:wght@100..400&display=swap');
+
+        body {
+            font-family: "Playwrite IT Moderna", cursive;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .menu-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-top: 20px;
+        }
+
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .menu-card {
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .menu-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .menu-card .card-body {
+            padding: 15px;
+        }
+
+        .menu-card h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.5em;
+            color: #333;
+        }
+
+        .menu-card p {
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        .menu-card .price {
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .search-bar {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input[type="text"] {
+            flex-grow: 1;
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .search-bar button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-bar button:hover {
+            background-color: #0056b3;
+        }
+        .add-to-cart {
+            padding: 0.5em 1em;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .add-to-cart:hover {
+            background-color: #218838;
+        }
+        .alert {
+            padding: 20px;
+            background-color: #4CAF50; 
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .alert.success {
+            background-color: #4CAF50;
+        }
+        .home-button {
+            text-align: center;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .home-button button, .view-cart-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .home-button button:hover, .view-cart-button:hover {
+            background-color: #0056b3;
+        }
+        .cart-modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .cart-modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .cart-items {
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .cart-total {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="container">
+        <div class="menu-header">
+            <h2>What would you like to have Today!</h2>
+        </div>
+
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search menu...">
+            <button type="button" onclick="searchMenu()">Search</button>
+        </div>
+        <div class="home-button">
+            <button onclick="window.location.href='http://127.0.0.1:8000/'">Go back to Home</button>
+            <button onclick="viewCart()">View Cart</button>
+        </div>
+        
+
+        <div class="menu-items">
+            <div class="menu-card" data-item-name="Dal Makhani">
+                <img src="https://rainbowplantlife.com/wp-content/uploads/2021/06/dal-makhani-flatlay-closeup-with-spoon-819x1024.jpg" alt="Food">
+                <div class="card-body">
+                    <h3>Dal Makhani</h3>
+                    <p>A creamy lentil dish made from black lentils (urad dal) and kidney beans (rajma), simmered with butter, cream, and spices.</p>
+                    <p class="price">Rs 220</p>
+                    <button class="add-to-cart" data-item-id="1" data-item-name="Dal Makhani" data-item-price="220">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="menu-card" data-item-name="Rogan Josh">
+                <img src="https://profoodrecipes.com/wp-content/uploads/2024/02/Rogan-Josh.jpg'" alt="Food">
+                <div class="card-body">
+                    <h3>Rogan Josh</h3>
+                    <p>A flavorful Kashmiri curry made with tender lamb or goat, cooked in a rich gravy of yogurt, spices like cardamom, cloves, and saffron.</p>
+                    <p class="price">Rs 500</p>
+                    <button class="add-to-cart"  data-item-id="2" data-item-name="Rogan Josh" data-item-price="500">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="menu-card" data-item-name="Dum Aloo">
+                <img src="http://www.cookingfromheart.com/wp-content/uploads/2017/08/Dum-Aloo-7.jpg" alt="Food">
+                <div class="card-body">
+                    <h3>Dum Aloo</h3>
+                    <p>Baby potatoes cooked in a rich, spicy gravy of yogurt, tomatoes, and aromatic spices, often garnished with fresh coriander.</p>
+                    <p class="price">Rs 280</p>
+                    <button class="add-to-cart" data-item-id="3" data-item-name="Dum Aloo" data-item-price="280">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="menu-card" data-item-name="Butter Chicken (Murgh Makhani)">
+                <img src="https://cafedelites.com/wp-content/uploads/2019/01/Butter-Chicken-IMAGE-64.jpg" alt="Food">
+                <div class="card-body">
+                    <h3>Butter Chicken (Murgh Makhani)</h3>
+                    <p>Succulent pieces of tandoori chicken cooked in a creamy tomato-based gravy with butter, cream, and fenugreek leaves (kasuri methi).</p>
+                    <p class="price">Rs 380</p>
+                    <button class="add-to-cart" data-item-id="4" data-item-name="Butter Chicken (Murgh Makhani)" data-item-price="380">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="menu-card" data-item-name="Pindi Chana">
+                <img src="https://i0.wp.com/www.rasoimenu.com/wp-content/uploads/2019/08/Pindi-Chana-Masala-Recipe.jpg?fit=1920%2C1080&ssl=1" alt="Food">
+                <div class="card-body">
+                    <h3>Pindi Chana</h3>
+                    <p>Spicy and tangy chickpea curry cooked with onions, tomatoes, and a blend of aromatic spices, originating from Punjab.</p>
+                    <p class="price">Rs 250</p>
+                    <button class="add-to-cart" data-item-id="5" data-item-name="Pindi Chana" data-item-price="250">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="menu-card" data-item-name="Malai Kofta">
+                <img src="https://www.carveyourcraving.com/wp-content/uploads/2021/09/Best-Malai-Kofta-recipe.jpg" alt="Food">
+                <div class="card-body">
+                    <h3>Malai Kofta</h3>
+                    <p>Deep-fried vegetable and cheese dumplings (koftas) served in a creamy, mildly-spiced tomato-based gravy.</p>
+                    <p class="price">Rs 300</p>
+                    <button class="add-to-cart" data-item-id="6" data-item-name="Malai Kofta" data-item-price="300">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="menu-card" data-item-name="Paneer Tikka">
+                <img src="https://2.bp.blogspot.com/-neI6rKuvsKI/VyN8GMrfhzI/AAAAAAAAHls/hugFFTKYgs8lrtUSXx0iEyG-KZwL4bPbwCLcB/s1600/tandoori-paneer-tikka4.jpg" alt="Food">
+                <div class="card-body">
+                    <h3>Paneer Tikka</h3>
+                    <p>Description of the item goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    <p class="price">Rs 300</p>
+                    <button class="add-to-cart" data-item-id="7" data-item-name="Paneer Tikka" data-item-price="300">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="menu-card" data-item-name="Keema Matar">
+                <img src="https://pakistanichefs.com/wp-content/uploads/2021/02/keema-matar.jpg" alt="Food">
+                <div class="card-body">
+                    <h3>Keema Matar</h3>
+                    <p>Minced meat (usually lamb or goat) cooked with green peas in a spicy tomato-based gravy, flavored with ginger, garlic, and garam masala.</p>
+                    <p class="price">Rs 450</p>
+                    <button class="add-to-cart" data-item-id="8" data-item-name="Keema Matar" data-item-price="450">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="menu-card" data-item-name="Dahi Bhalla">
+                <img src="https://profoodrecipes.com/wp-content/uploads/2024/02/Dahi-Bhalla.jpg" alt="Food">
+                <div class="card-body">
+                    <h3>Dahi Bhalla</h3>
+                    <p>Consists of soft lentil fritters soaked in creamy yogurt, garnished with tangy tamarind chutney, spicy green chutney, and a sprinkle of roasted cumin powder. </p>
+                    <p class="price">Rs 100</p>
+                    <button class="add-to-cart" data-item-id="9" data-item-name="Dahi Bhalla" data-item-price="100">Add to Cart</button>
+                </div>
+            </div>
+
+           
+
+        </div>
+    </div>
+    <div id="cartModal" class="cart-modal">
+        <div class="cart-modal-content">
+            <span class="close" onclick="closeCart()">&times;</span>
+            <h2>Your Cart</h2>
+            <div class="cart-items"></div>
+            <div class="cart-total">Total: $0.00</div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var cart = [];
+
+            var buttons = document.querySelectorAll('.add-to-cart');
+            buttons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var itemId = this.getAttribute('data-item-id');
+                    var itemName = this.getAttribute('data-item-name');
+                    var itemPrice = parseFloat(this.getAttribute('data-item-price'));
+                    addToCart(itemId, itemName, itemPrice);
+                });
+            });
+
+            function addToCart(itemId, itemName, itemPrice) {
+                cart.push({ id: itemId, name: itemName, price: itemPrice });
+                alert(itemName + ' has been added to the cart.');
+            }
+
+            window.viewCart = function() {
+                var modal = document.getElementById('cartModal');
+                var cartItemsContainer = modal.querySelector('.cart-items');
+                var cartTotalContainer = modal.querySelector('.cart-total');
+
+                cartItemsContainer.innerHTML = '';
+                var total = 0;
+
+                cart.forEach(function(item) {
+                    total += item.price;
+
+                    var itemElement = document.createElement('div');
+                    itemElement.className = 'cart-item';
+                    itemElement.innerHTML = `<span>${item.name}</span><span>$${item.price.toFixed(2)}</span>`;
+                    cartItemsContainer.appendChild(itemElement);
+                });
+
+                cartTotalContainer.innerHTML = `Total: $${total.toFixed(2)}`;
+                modal.style.display = 'block';
+            }
+
+            window.closeCart = function() {
+                var modal = document.getElementById('cartModal');
+                modal.style.display = 'none';
+            }
+
+            window.onclick = function(event) {
+                var modal = document.getElementById('cartModal');
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            }
+
+            window.searchMenu = function() {
+                var input = document.getElementById('searchInput').value.toLowerCase();
+                var menuItems = document.querySelectorAll('.menu-card');
+
+                menuItems.forEach(function(item) {
+                    var itemName = item.getAttribute('data-item-name').toLowerCase();
+                    var displayStyle = itemName.includes(input) ? 'block' : 'none';
+                    item.style.display = displayStyle;
+                });
+            }
+        });
+    </script>
+</body>
+</html>
