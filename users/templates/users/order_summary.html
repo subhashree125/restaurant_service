@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Summary</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playwrite+IT+Moderna:wght@100..400&display=swap');
+        body {
+            font-family: "Playwrite IT Moderna", cursive;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .order-summary-container {
+            width: 80%;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #000100;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .order-items {
+            margin: 20px 0;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .order-item span, .order-item input {
+            flex: 1;
+            text-align: center;
+        }
+
+        .order-item input {
+            max-width: 50px;
+            border: 1px solid #ddd;
+            padding: 5px;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .order-item button {
+            flex: 0 0 auto;
+            margin-left: 10px;
+            padding: 5px 10px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .order-item button:hover {
+            background-color: #d32f2f;
+        }
+
+        .order-total {
+            text-align: right;
+            font-size: 1.2em;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .order-total span {
+            color: #4CAF50;
+        }
+
+        .confirm-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: background-color 0.3s ease;
+        }
+
+        .confirm-button:hover {
+            background-color: #45a049;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .back-button {
+            width: 48%;
+            padding: 15px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #d32f2f;
+        }
+
+        .confirm-button {
+            width: 48%;
+        }
+    </style>
+</head>
+<body>
+    <div class="order-summary-container">
+        <h1>Order Summary</h1>
+        <div class="order-items">
+            
+        </div>
+        <div class="order-total">
+            <span>Total Amount: Rs <span id="totalAmount">0.00</span></span>
+        </div>
+        <div class="button-container">
+            <button class="back-button" onclick="goBack()">Back</button>
+            <button class="confirm-button" onclick="confirmOrder()">Confirm Order</button>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var currentUser = '{{ username }}';
+            
+            var cart = JSON.parse(localStorage.getItem('cart')) || [];
+            var orderItemsContainer = document.querySelector('.order-items');
+            var totalAmountElement = document.getElementById('totalAmount');
+            var totalAmount = 0;
+
+            function updateOrderSummary() {
+                orderItemsContainer.innerHTML = '';
+                totalAmount = 0;
+
+                cart.forEach(function(item, index) {
+                    totalAmount += item.price * item.quantity;
+
+                    var itemElement = document.createElement('div');
+                    itemElement.className = 'order-item';
+                    itemElement.innerHTML = `
+                        <span>${item.name}</span>
+                        <span>Rs ${item.price.toFixed(2)}</span>
+                        <input type="number" value="${item.quantity}" min="1" data-index="${index}" class="item-quantity">
+                        <button data-index="${index}" class="delete-item">Delete</button>
+                    `;
+                    orderItemsContainer.appendChild(itemElement);
+                });
+
+                totalAmountElement.textContent = totalAmount.toFixed(2);
+
+                
+                var quantityInputs = orderItemsContainer.querySelectorAll('.item-quantity');
+                quantityInputs.forEach(function(input) {
+                    input.addEventListener('change', function() {
+                        var index = this.getAttribute('data-index');
+                        var newQuantity = parseInt(this.value);
+                        cart[index].quantity = newQuantity;
+                        localStorage.setItem('cart', JSON.stringify(cart));
+                        updateOrderSummary();
+                    });
+                });
+
+                var deleteButtons = orderItemsContainer.querySelectorAll('.delete-item');
+                deleteButtons.forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        var index = this.getAttribute('data-index');
+                        cart.splice(index, 1);
+                        localStorage.setItem('cart', JSON.stringify(cart));
+                        updateOrderSummary();
+                    });
+                });
+            }
+
+            updateOrderSummary();
+
+            window.confirmOrder = function() {
+                var orderHistoryKey = 'orderHistory_' + currentUser;
+                var orderHistory = JSON.parse(localStorage.getItem(orderHistoryKey)) || [];
+                var orderDetails = {
+                    date: new Date().toISOString().slice(0, 10), 
+                    items: cart.map(item => item.name).join(', '), 
+                    quantities: cart.map(item => item.quantity).join(', '), 
+                    totalAmount: totalAmount.toFixed(2) 
+                };
+                orderHistory.push(orderDetails);
+                localStorage.setItem(orderHistoryKey, JSON.stringify(orderHistory));
+                localStorage.removeItem('cart');
+                window.location.href = '/confirmation';  
+            }
+            window.goBack = function() {
+                window.history.back();
+            }
+           
+        });
+    </script>
+</body>
+</html>

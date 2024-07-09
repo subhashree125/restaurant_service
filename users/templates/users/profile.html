@@ -1,0 +1,225 @@
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playwrite+IT+Moderna:wght@100..400&display=swap');
+        body {
+            font-family: "Playwrite IT Moderna", cursive;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .profile-container {
+            width: 90%;
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .personal-details, .edit-profile, .order-history {
+            margin-bottom: 30px;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .detail-item span {
+            flex: 1;
+            text-align: left;
+            font-size: 1.1em;
+        }
+
+        .edit-profile form {
+            max-width: 400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .edit-profile form label, .edit-profile form input, .edit-profile form button {
+            margin-bottom: 15px;
+            font-size: 1em;
+        }
+
+        .edit-profile form label {
+            font-weight: bold;
+        }
+
+        .edit-profile form input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .edit-profile form button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .edit-profile form button:hover {
+            background-color: #0056b3;
+        }
+
+        .order-item {
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .order-item div {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .order-item div span {
+            flex: 1;
+            text-align: left;
+        }
+
+        .order-item .item-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .go-back-button {
+            display: block;
+            width: 100px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #f44336;
+            color: white;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .go-back-button:hover {
+            background-color: #d32f2f;
+        }
+
+        .order-history h2 {
+            margin-bottom: 20px;
+        }
+
+        .order-history p {
+            text-align: center;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <h1>User Profile</h1>
+        
+        <div class="personal-details">
+            <h2>Personal Details</h2>
+            <div class="detail-item">
+                <span>Username: </span>
+                <span id="username">{{ username }}</span> 
+            </div>
+            <div class="detail-item">
+                <span>Email: </span>
+                <span id="email">{{ email }}</span> 
+            </div>
+        </div>
+
+        <div class="edit-profile">
+            <h2>Edit Profile</h2>
+            <form method="POST" novalidate>
+                {% csrf_token %}
+                {{ user_form|crispy }}
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+
+        <div class="order-history">
+            <h2>Order History</h2>
+            <div id="orderHistory"></div>
+        </div>
+
+        <button class="go-back-button" onclick="window.location.href='http://127.0.0.1:8000/'">Go Back</button>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var deleteOrderHistory = getCookie('deleteOrderHistory');
+            if (deleteOrderHistory) {
+                localStorage.removeItem('orderHistory_' + deleteOrderHistory);
+                document.cookie = 'deleteOrderHistory=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+            }
+            var currentUser = '{{ username }}'; 
+            var orderHistoryKey = 'orderHistory_' + currentUser;
+            var orderHistory = JSON.parse(localStorage.getItem(orderHistoryKey)) || [];
+
+            var orderHistoryContainer = document.getElementById('orderHistory');
+            if (orderHistory.length === 0) {
+                orderHistoryContainer.innerHTML = '<p>No order history found.</p>';
+            } else {
+                orderHistory.forEach(function(order) {
+                    var orderItem = document.createElement('div');
+                    orderItem.className = 'order-item';
+                    orderItem.innerHTML = `
+                        <div>
+                            <span>Date:</span>
+                            <span>${order.date}</span>
+                        </div>
+                        <div class="item-details">
+                            <span>Items:</span>
+                            <span>${order.items}</span>
+                        </div>
+                        <div class="item-details">
+                            <span>Quantities:</span>
+                            <span>${order.quantities}</span>
+                        </div>
+                        <div>
+                            <span>Total Amount:</span>
+                            <span>${order.totalAmount}</span>
+                        </div>
+                    `;
+                    orderHistoryContainer.appendChild(orderItem);
+                });
+            }
+        });
+
+        function getCookie(name) {
+            var value = '; ' + document.cookie;
+            var parts = value.split('; ' + name + '=');
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }        
+    </script>
+</body>
+</html>

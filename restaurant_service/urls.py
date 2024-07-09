@@ -27,5 +27,8 @@ urlpatterns = [
     path('logout/', user_views.logout_view, name='logout'),
     path('menu/', user_views.menu, name='menu'),
     path('', user_views.home, name='home'),
+    path('order_summary', user_views.order_summary, name='order_summary'),
+    path('confirmation', user_views.confirmation, name='confirmation'),
+    path('profile/', user_views.profile, name='profile'), 
     path('contact/', contact_view, name='contact'),
 ]
